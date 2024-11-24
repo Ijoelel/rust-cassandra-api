@@ -1,4 +1,4 @@
-ARG PACKAGE=rust_cassandra_api
+ARG PACKAGE=learn-rust-api
 
 FROM rust:1.81.0-slim-bookworm AS chef
 
@@ -13,6 +13,7 @@ RUN apt-get update && apt-get install -y \
     curl \
     wget \
     zlib1g-dev \
+    iputils-ping \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
@@ -20,11 +21,7 @@ ARG CHEF_TAG=0.1.68
 RUN cargo install cargo-chef --locked --version $CHEF_TAG
 WORKDIR /build
 
-RUN git config --global http.postBuffer 524288000 \
-    && git config --global http.maxRequests 100 \
-    && git config --global http.lowSpeedLimit 0 \
-    && git config --global http.lowSpeedTime 999999 \
-    && git clone https://github.com/datastax/cpp-driver.git \
+RUN git clone https://github.com/datastax/cpp-driver.git \
     && cd cpp-driver \
     && mkdir build && cd build \
     && cmake .. \

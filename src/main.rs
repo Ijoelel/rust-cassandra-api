@@ -24,7 +24,7 @@ static SESSION: OnceCell<CurrentSession> = OnceCell::new();
 
 async fn initialize_session() -> CurrentSession {
     let cluster_config = NodeTcpConfigBuilder::new()
-        .with_contact_point("127.0.0.1:9042".into())
+        .with_contact_point("cassandra:9042".into())
         .build()
         .await
         .expect("Cluster configuration failed");
@@ -124,7 +124,7 @@ async fn main() -> std::io::Result<()> {
             .service(update_data)
             // .route("/query", web::post().to(query))
     })
-    .bind("127.0.0.1:3001")?
+    .bind("0.0.0.0:3001")?
     .run()
     .await
 }
